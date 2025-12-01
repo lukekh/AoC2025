@@ -1,2 +1,3 @@
-# AoC2025
-My solutions to Advent of Code 2025
+# 🎄 Advent of Code 2025 🎄
+
+Here are my solutions to the [Advent of Code 2025 problems.](https://adventofcode.com/2025/) If you're interested in joining my private leaderboard, please use this code: ```965501-be47b57d```. 
