@@ -30,25 +30,15 @@ def solve(line: list[int], digits: int):
     return int(recursive_solve(line, digits))
 
 
-def part_one(data: list[list[int]]):
-    """Solution to part one"""
-    return sum(solve(line, 2) for line in data)
-
-
-def part_two(data: list[list[int]], digits: int = 12):
-    """Solution to part two"""
-    return sum(solve(line, digits) for line in data)
-
-
 def main():
     """Run the solutions and print the results"""
     print(__doc__)
     # Parse inputs
     data = parse(input_path)
     # Part 1
-    print(f"Part 1: {part_one(data)}")
+    print(f"Part 1: {sum(solve(line, 2) for line in data)}")
     # Part 2
-    print(f"Part 2: {part_two(data)}")
+    print(f"Part 2: {sum(solve(line, 12) for line in data)}")
 
 
 if __name__ == '__main__':
