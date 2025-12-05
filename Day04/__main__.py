@@ -34,12 +34,15 @@ def part_one(data: np.ndarray, adj: int = 4):
     # Convolve to count neighbors for each cell
     neighbor_count = convolve2d(data, FILTER, mode='same', boundary='fill', fillvalue=0)
     # Cell is True if it's set AND has fewer than `adj` neighbors
-    coord_mat = data & (neighbor_count < adj)
-    return coord_mat
+    return data & (neighbor_count < adj)
 
 
 def part_two(data: np.ndarray, coord_mat: np.ndarray):
-    """Solution to part two"""
+    """
+    Solution to part two
+
+    Expects the output of part one as input to save one step of computation.
+    """
     move_map = np.zeros(data.shape, dtype=bool)
     while coord_mat.any():
         # Update data with removed rolls
