@@ -1,11 +1,13 @@
 """AoC :: Day 4"""
 import numpy as np
 from pathlib import Path
+# This speeds things up significantly
+from scipy.signal import convolve2d
 
-
+# Constants
 input_path = Path(__file__).parent / 'Day04.in'
-
 ROLL_SYMBOL = "@"
+
 
 def parse(path: Path):
     """Parse the plaintext input"""
@@ -19,7 +21,8 @@ def parse(path: Path):
             array[lines.index(line), j] = (c == ROLL_SYMBOL)    
     return array
 
-# Part one effectively implements a CNN filter with padding over the input data
+
+# Part one effectively implements a CNN convolution over the input data
 FILTER = np.array(
     [[1, 1, 1],
      [1, 0, 1],
@@ -28,27 +31,23 @@ FILTER = np.array(
 
 def part_one(data: np.ndarray, adj: int = 4):
     """Solution to part one"""
-    coords: set[tuple[int, int]] = set()
-    padded_data = np.pad(data, ((1,1),(1,1)), mode="constant")
-    for row, vec in enumerate(data):
-        for col, val in enumerate(vec):
-            # Only need to count this if there is a roll there, i.e. val is True
-            if val and np.sum(padded_data[row:row+3,col:col+3] * FILTER) < adj:
-                coords.add((row, col))
-    return coords
+    # Convolve to count neighbors for each cell
+    neighbor_count = convolve2d(data, FILTER, mode='same', boundary='fill', fillvalue=0)
+    # Cell is True if it's set AND has fewer than `adj` neighbors
+    coord_mat = data & (neighbor_count < adj)
+    return coord_mat
 
 
-def part_two(data: np.ndarray, coords: set[tuple[int, int]]):
+def part_two(data: np.ndarray, coord_mat: np.ndarray):
     """Solution to part two"""
-    count = 0
-    while coords:
+    move_map = np.zeros(data.shape, dtype=bool)
+    while coord_mat.any():
         # Update data with removed rolls
-        count += len(coords)
-        for coord in coords:
-            data[coord] = False
+        move_map |= coord_mat
+        data &= ~coord_mat
         # Get new coords
-        coords = part_one(data)
-    return count
+        coord_mat = part_one(data)
+    return np.sum(move_map)
 
 
 def main():
@@ -57,7 +56,7 @@ def main():
     # Parse inputs
     data = parse(input_path)
     # Part 1
-    print(f"Part 1: {len(coords := part_one(data))}")
+    print(f"Part 1: {np.sum(coords := part_one(data))}")
     # Part 2
     print(f"Part 2: {part_two(data, coords)}")
 
