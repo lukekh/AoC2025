@@ -16,9 +16,9 @@ def parse(path: Path):
 
     # init a np.ndarray
     array = np.zeros((rows, cols), dtype=bool)
-    for line in lines:
+    for row, line in enumerate(lines):
         for j, c in enumerate(line):
-            array[lines.index(line), j] = (c == ROLL_SYMBOL)    
+            array[row, j] = (c == ROLL_SYMBOL)    
     return array
 
 
