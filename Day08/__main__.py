@@ -37,7 +37,7 @@ def parse(path: Path):
 
 
 def solution_generator(data: list[JunctionBox], limit: int = LIMIT):
-    """Solution to part one"""
+    """A generator that yields the solutions to both parts"""
     # All pairs possible sorted from closest to furthest away
     dist2_ranked_pairs = sorted(
         ((j1.dist2(j2), (j1, j2)) for i, j1 in enumerate(data) for j2 in data[i+1:]),
