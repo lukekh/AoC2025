@@ -5,7 +5,7 @@ from pathlib import Path
 from scipy.signal import convolve2d
 
 # Constants
-input_path = Path(__file__).parent / 'Day04.in'
+input_path = Path(__file__).parent / "Day04.in"
 ROLL_SYMBOL = "@"
 
 
@@ -18,21 +18,18 @@ def parse(path: Path):
     array = np.zeros((rows, cols), dtype=bool)
     for row, line in enumerate(lines):
         for j, c in enumerate(line):
-            array[row, j] = (c == ROLL_SYMBOL)    
+            array[row, j] = c == ROLL_SYMBOL
     return array
 
 
 # Part one effectively implements a CNN convolution over the input data
-FILTER = np.array(
-    [[1, 1, 1],
-     [1, 0, 1],
-     [1, 1, 1]]
-)
+FILTER = np.array([[1, 1, 1], [1, 0, 1], [1, 1, 1]])
+
 
 def part_one(data: np.ndarray, adj: int = 4):
     """Solution to part one"""
     # Convolve to count neighbors for each cell
-    neighbor_count = convolve2d(data, FILTER, mode='same', boundary='fill', fillvalue=0)
+    neighbor_count = convolve2d(data, FILTER, mode="same", boundary="fill", fillvalue=0)
     # Cell is True if it's set AND has fewer than `adj` neighbors
     return data & (neighbor_count < adj)
 
@@ -64,5 +61,5 @@ def main():
     print(f"Part 2: {part_two(data, coords)}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
